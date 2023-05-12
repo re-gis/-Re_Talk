@@ -1,11 +1,21 @@
 import express from "express";
-const app = express();
 import dotenv from "dotenv";
 import { chats } from "./data/data.js";
-import cors from 'cors'
+import cors from "cors";
+import { connectDb } from "./Config/db.js";
+import colors from "colors";
+import { userRouter } from "./Routers/user.routes.js";
+import { errorHandler, notFound } from "./middlewares/error.middleware.js";
+const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 
+// Accept formdata
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// connect database
+connectDb();
 
 app.use(
   cors({
@@ -14,10 +24,13 @@ app.use(
   })
 );
 
-app.get("/api/chat", (req, res) => {
-  return res.send(chats);
-});
+// Error middewares
+// app.use(notFound)
+// app.use(errorHandler)
+
+// user routes
+app.use("/api/user", userRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server listening port ${PORT}...`);
+  console.log(`Server listening port ${PORT}...`.underline.blue);
 });
