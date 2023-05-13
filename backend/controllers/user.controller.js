@@ -63,3 +63,22 @@ export const registerUser = async (req, res) => {
     return res.status(500).send({ message: "Internal server error..." });
   }
 };
+
+// /api/users?search=piyush
+export const allUsers = async (req, res) => {
+  if (!req.user) return res.status(401).send({ message: "Not authorized!" });
+  const keyWord = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find({ ...keyWord })
+    .find({ _id: { $ne: req.user._id } })
+    .select("-password");
+
+  return res.status(200).send(users);
+};
