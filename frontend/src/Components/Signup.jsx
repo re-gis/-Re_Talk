@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import { useHistory } from "react-router-dom";
 import {
   Stack,
   HStack,
@@ -10,6 +13,7 @@ import {
   InputRightElement,
   Button,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -18,19 +22,124 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pic, setPic] = useState();
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
+
+  const toast = useToast();
 
   const handleClick = () => setShow(!show);
 
-  const postDetails = (files) => {
-    // const data = new FormData();
-    // data.append("file", files);
-    // data.append("upload_preset", "retalk");
-    // data.append("cloud_name", "retalk");
-    // fetch("https://api.cloudinary.com/v1_1/retalk/image/upload", {
-    //     method: "post",
-  };
+  // const postDetails = (files) => {
+  //   setLoading(true);
+  //   if (files === undefined) {
+  //     toast({
+  //       title: "No profile picture selected",
+  //       status: "warning",
+  //       duration: 5000,
+  //       isClosable: true,
+  //       position: "bottom",
+  //     });
+  //     return;
+  //   }
 
-  const handleSubmit = () => {};
+  //   if (files.type === "image/png" || files.type === "image/jpeg") {
+  //     const boundary = uuidv4();
+  //     const data = new FormData(undefined, {
+  //       headers: {
+  //         "Content-Type": `multipart/form-data; boundary=${boundary}`
+  //       },
+  //     });
+  //     data.append("file", files);
+  //     data.append("upload_preset", "chatapp");
+  //     data.append("cloud_name", "ddlpbz63t");
+
+  //     console.log(files)
+  //     console.log(data)
+
+  //     fetch("https://api.cloudinary.com/v1_1/ddlpbz63t/image/upload", {
+  //       method: "post",
+  //       body: data,
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setPic(data.url.toString());
+  //         setLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else {
+  //     toast({
+  //       title: "Invalid file format",
+  //       status: "error",
+  //       duration: 5000,
+  //       isClosable: true,
+  //       position: "bottom",
+  //     });
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (!name || !email || !password || !confirmPassword) {
+      toast({
+        title: "Please fill all the fields",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast({
+        title: "Passwords don't match",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user",
+        { name, email, password },
+        config
+      );
+
+      toast({
+        title: "Account created successfully",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      history.push("/chat");
+    } catch (error) {
+      toast({
+        title: "Email already exists",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
   return (
     <>
       <VStack spacing={"5px"} color={"black"}>
@@ -95,7 +204,7 @@ const Signup = () => {
             type="file"
             p={1.5}
             accept="image/*"
-            onChange={(e) => postDetails(e.target.files[0])}
+            // onChange={(e) => postDetails(e.target.files[0])}
           />
         </FormControl>
 
@@ -104,6 +213,7 @@ const Signup = () => {
           width={"100%"}
           style={{ marginTop: 15 }}
           onClick={handleSubmit}
+          isLoading={loading}
         >
           Sign up
         </Button>
