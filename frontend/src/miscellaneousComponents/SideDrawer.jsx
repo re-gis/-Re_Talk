@@ -14,14 +14,22 @@ import React, { useState } from "react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../context/ChatProvider";
 import ProfileModel from "./ProfileModel";
+import { useNavigate } from "react-router-dom";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
+  const navigate = useNavigate();
 
   const { user } = ChatState();
+  const userInfo = localStorage.getItem("userInfo");
+
+  const handleLogout = () => {
+    localStorage.removeItem("userInfo");
+    navigate("/");
+  };
   return (
     <>
       <Box
@@ -62,16 +70,16 @@ const SideDrawer = () => {
               <Avatar
                 size={"sm"}
                 cursor={"pointer"}
-                name={user.name}
-                src={user.pic}
+                name={userInfo.name}
+                src={userInfo.pic}
               />
             </MenuButton>
             <MenuList>
-              <ProfileModel user={user}>
+              <ProfileModel user={userInfo}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModel>
               <MenuDivider />
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </div>

@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom/";
+import { Route, Routes } from "react-router-dom/";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import ChatPage from "./pages/ChatPage";
@@ -9,8 +9,10 @@ axios.defaults.baseURL = "http://127.0.0.1:5000";
 function App() {
   return (
     <div className="App">
-      <Route path="/" component={HomePage} exact />
-      <Route path="/chats" component={ChatPage} />
+      <Routes>
+        <Route path="/" element={<HomePage />} exact />
+        <Route path="/chats" element={<ChatPage />} />
+      </Routes>
     </div>
   );
 }

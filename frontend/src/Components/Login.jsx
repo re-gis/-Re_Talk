@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import {
   Stack,
   HStack,
@@ -13,6 +12,8 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { ChatState } from "../context/ChatProvider";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,8 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const { user } = ChatState();
 
   const handleClick = () => setShow(!show);
 
@@ -49,16 +51,15 @@ const Login = () => {
         { email, password },
         config
       );
-        toast({
-          title: "Login Successful",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
+      toast({
+        title: "Login Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chat");
     } catch (error) {
       toast({
         title: "Invalid Credentials",
@@ -70,6 +71,13 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const userInfo = localStorage.getItem("userInfo");
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/chats");
+    }
+  }, [userInfo]);
   return (
     <>
       <VStack spacing={"5px"} color={"black"}>

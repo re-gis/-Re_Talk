@@ -3,16 +3,18 @@ import React, { useEffect } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Signup from "../Components/Signup";
 import Login from "../Components/Login";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 const HomePage = () => {
-  const history = useHistory();
+  // const history = useHistory();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     if (userInfo) {
-      history.push("/chats");
+      navigate("/chats");
     }
   }, [history]);
   return (

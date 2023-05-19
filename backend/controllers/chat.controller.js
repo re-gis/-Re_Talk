@@ -145,6 +145,7 @@ export const removeFromGroup = async (req, res) => {
   )
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
+    
 
   if (!removedUser) return res.status(404).send({ message: "Chat not found!" });
   return res.status(201).json(removedUser);

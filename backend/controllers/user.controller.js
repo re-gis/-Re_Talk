@@ -64,7 +64,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// /api/users?search=piyush
+// /api/users?search=regis
 export const allUsers = async (req, res) => {
   if (!req.user) return res.status(401).send({ message: "Not authorized!" });
   const keyWord = req.query.search

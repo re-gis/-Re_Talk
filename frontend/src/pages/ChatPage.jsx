@@ -5,13 +5,22 @@ import { Box } from "@chakra-ui/react";
 import SideDrawer from "../miscellaneousComponents/SideDrawer";
 import MyChats from "../miscellaneousComponents/MyChats";
 import ChatBox from "../miscellaneousComponents/ChatBox";
+import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
   const { user } = ChatState();
+  const userInfo = localStorage.getItem("userInfo")
+  const navigate = useNavigate()
+  useEffect(() => {
+
+    if(!userInfo) {
+      navigate('/')
+    }
+  }, [userInfo])
   return (
     <>
       <div style={{ width: "100%" }}>
-        {user && <SideDrawer />}
+        {userInfo && <SideDrawer />}
         <Box 
         display={"flex"}
         justifyContent={"space-between"}
@@ -19,8 +28,8 @@ const ChatPage = () => {
         h={'91.5vh'}
         p={'10px'}
         >
-          {user && <MyChats />}
-          {user && <ChatBox />}
+          {userInfo && <MyChats />}
+          {userInfo && <ChatBox />}
         </Box>
       </div>
     </>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import {
   Stack,
   HStack,
@@ -14,6 +14,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -23,7 +24,7 @@ const Signup = () => {
   const [pic, setPic] = useState();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const toast = useToast();
 
@@ -128,7 +129,7 @@ const Signup = () => {
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chat");
+      navigate("/chats");
     } catch (error) {
       toast({
         title: "Email already exists",
@@ -177,7 +178,7 @@ const Signup = () => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <FormControl id="password" isRequired>
+        <FormControl id="confirmPassword" isRequired>
           <FormLabel>Confirm Password</FormLabel>
           <InputGroup>
             <Input
