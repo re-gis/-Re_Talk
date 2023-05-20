@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 const ProfileModel = ({ user, children }) => {
-  const u = JSON.parse(user)
+  const u = JSON.parse(user);
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
@@ -36,7 +36,7 @@ const ProfileModel = ({ user, children }) => {
         isCentered
       >
         <ModalOverlay />
-        <ModalContent h={'410px'}>
+        <ModalContent h={"410px"}>
           <ModalHeader
             fontSize={"40px"}
             fontFamily={"Work-sans"}
