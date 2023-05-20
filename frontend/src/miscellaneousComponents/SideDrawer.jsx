@@ -13,6 +13,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   Text,
   Tooltip,
   useDisclosure,
@@ -90,17 +91,21 @@ const SideDrawer = () => {
         },
       };
 
-      const {data} = await axios.post('/api/chats', {userId}, config)
-      setSelectedChat(data)
-      setLoadingChat(false)
-      onClose()
+      const { data } = await axios.post("/api/chats", { userId }, config);
+      if (!chats.find((chat) => chat._id === data._id))
+        setChats([data, ...chats]);
+
+      setSelectedChat(data);
+      setLoadingChat(false);
+      onClose();
     } catch (error) {
       toast({
         title: "Internal server error",
+        description: error.message,
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-left",
+        position: "bottom-left",
       });
     }
   };
@@ -176,14 +181,17 @@ const SideDrawer = () => {
             {loading ? (
               <ChatLoading />
             ) : (
-              searchResults?.map((user) => (
-                <UserListItem
-                  key={user._id}
-                  user={user}
-                  handleFunction={() => accessChat(user._id)}
-                />
+              searchResults?.map((rs) => (
+                <>
+                  <UserListItem
+                    key={rs._id}
+                    user={rs}
+                    handleFunction={() => accessChat(rs._id)}
+                  />
+                </>
               ))
             )}
+            {loadingChat && <Spinner ml={"auto"} display={"flex"} />}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

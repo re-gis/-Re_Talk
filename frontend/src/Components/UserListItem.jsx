@@ -21,9 +21,9 @@ const UserListItem = ({ user, handleFunction }) => {
     >
       <Avatar mr={2} size={"sm"} cursor={"pointer"} name={u.name} src={u.pic} />
       <Box>
-        <Text>{u.name}</Text>
-        <Text fontSize={'xs'}>
-            <b>Email: </b> {u.email}
+        <Text>{user.name}</Text>
+        <Text fontSize={"xs"}>
+          <b>Email: </b> {user.email}
         </Text>
       </Box>
     </Box>
