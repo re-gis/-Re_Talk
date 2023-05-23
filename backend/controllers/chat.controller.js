@@ -63,18 +63,20 @@ export const fetchChats = async (req, res) => {
 };
 
 export const createGroupChat = async (req, res) => {
-  if (!req.body.name || !req.body.users)
+  try {
+    
+    if (!req.body.name || !req.body.users)
     return res.status(400).send({ message: "Please fill out all fields!" });
-
-  const users = JSON.parse(req.body.users);
-
+    
+    const users = JSON.parse(req.body.users);
+    
   if (users.length < 2)
     return res.status(400).send({
       message: "More than 2 users are required to form a group chat!",
     });
-
-  users.push(req.user);
-
+    
+    users.push(req.user);
+    
   try {
     const groupChat = await Chat.create({
       chatName: req.body.name,
@@ -82,24 +84,27 @@ export const createGroupChat = async (req, res) => {
       isGroupChat: true,
       groupAdmin: req.user,
     });
-
+    
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
-      .populate("users", "-password")
-      .populate("groupAdmin", "-password");
-
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+    
     return res.status(200).json(fullGroupChat);
   } catch (error) {
     console.log(error);
     return res.status(400).send(error.message);
   }
+} catch (error) {
+  console.log(error)
+}
 };
 
 export const renameGroup = async (req, res) => {
   const { chatId, chatName } = req.body;
   if (!chatId) return res.status(400).send({ message: "Something occurred!" });
   if (!chatName)
-    return res.status(400).send({ message: "Group name required!" });
-
+  return res.status(400).send({ message: "Group name required!" });
+  
   const updatedChat = await Chat.findByIdAndUpdate(
     chatId,
     {

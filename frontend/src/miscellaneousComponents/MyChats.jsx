@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ChatState } from "../context/ChatProvider";
-import { Box, Button, useToast } from "@chakra-ui/react";
+import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from "../Components/ChatLoading";
+import { getSender } from "../config/ChatLogics";
+import GroupChatModal from "../GroupChatModal";
 
 const MyChats = () => {
   const userInfo = localStorage.getItem("userInfo");
@@ -59,11 +61,15 @@ const MyChats = () => {
           alignItems={"center"}
         >
           My Chats
-          <Button
-            display={"flex"}
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-            rightIcon={<AddIcon />}
-          ></Button>
+          <GroupChatModal>
+            <Button
+              display={"flex"}
+              fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+              rightIcon={<AddIcon />}
+            >
+              New Group Chat
+            </Button>
+          </GroupChatModal>
         </Box>
 
         <Box
@@ -76,8 +82,27 @@ const MyChats = () => {
           h={"100%"}
           overflowY={"hidden"}
         >
-          {chats ? (
-            <h1>hello</h1>
+          {chats.length !== 0 ? (
+            <Stack overflow={"scroll"}>
+              {chats.map((chat) => (
+                <Box
+                  cursor={"pointer"}
+                  onClick={() => setSelectedChat(chat)}
+                  bg={selectedChat === chat ? "#38b2ac" : "#e8e8e8"}
+                  color={selectedChat === chat ? "white" : "black"}
+                  px={3}
+                  py={2}
+                  borderRadius={"lg"}
+                  key={chat._id}
+                >
+                  <Text>
+                    {!chat.isGroupChat
+                      ? getSender(loggedUser, chat.users)
+                      : chat.name}
+                  </Text>
+                </Box>
+              ))}
+            </Stack>
           ) : (
             <ChatLoading />
           )}
