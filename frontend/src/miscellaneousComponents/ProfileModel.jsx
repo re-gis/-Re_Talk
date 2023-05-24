@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 const ProfileModel = ({ user, children }) => {
-  const u = JSON.parse(user);
+  const u = JSON.parse(user)
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
@@ -52,6 +52,7 @@ const ProfileModel = ({ user, children }) => {
             alignItems={"center"}
             justifyContent={"space-between"}
           >
+            {console.log(user)}
             <Image
               borderRadius={"full"}
               boxSize={"150px"}

@@ -9,27 +9,31 @@ import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
   const { user } = ChatState();
-  const userInfo = localStorage.getItem("userInfo")
-  const navigate = useNavigate()
+  const [fetchAgain, setFetchAgain] = useState(false);
+  const userInfo = localStorage.getItem("userInfo");
+  const navigate = useNavigate();
   useEffect(() => {
-
-    if(!userInfo) {
-      navigate('/')
+    if (!userInfo) {
+      navigate("/");
     }
-  }, [userInfo])
+  }, [userInfo]);
   return (
     <>
       <div style={{ width: "100%" }}>
         {userInfo && <SideDrawer />}
-        <Box 
-        display={"flex"}
-        justifyContent={"space-between"}
-        w={'100%'}
-        h={'91.5vh'}
-        p={'10px'}
+        <Box
+          display={"flex"}
+          justifyContent={"space-between"}
+          w={"100%"}
+          h={"91.5vh"}
+          p={"10px"}
         >
-          {userInfo && <MyChats />}
-          {userInfo && <ChatBox />}
+          {userInfo && (
+            <MyChats fetchAgain={fetchAgain}/>
+          )}
+          {userInfo && (
+            <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+          )}
         </Box>
       </div>
     </>

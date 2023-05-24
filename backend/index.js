@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-app.get("/api/chat", (req, res) => {
+app.get("/api/chats", (req, res) => {
   return res.status(200).send(chats);
 });
 
@@ -37,7 +37,7 @@ app.get("/api/chat", (req, res) => {
 app.use("/api/user", userRouter);
 
 // Chat routes
-app.use("/api/chat", chatRouter);
+app.use("/api/chats", chatRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening port ${PORT}...`.underline.blue);

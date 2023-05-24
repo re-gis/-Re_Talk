@@ -6,7 +6,7 @@ import ChatLoading from "../Components/ChatLoading";
 import { getSender } from "../config/ChatLogics";
 import GroupChatModal from "../GroupChatModal";
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
   const userInfo = localStorage.getItem("userInfo");
   const u = JSON.parse(userInfo);
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -20,7 +20,7 @@ const MyChats = () => {
           authorization: "Bearer " + u.token,
         },
       };
-      const { data } = await axios.get(`/api/chat`, config);
+      const { data } = await axios.get(`/api/chats`, config);
       setChats(data);
     } catch (error) {
       toast({
@@ -36,7 +36,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(u);
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <>
@@ -98,7 +98,7 @@ const MyChats = () => {
                   <Text>
                     {!chat.isGroupChat
                       ? getSender(loggedUser, chat.users)
-                      : chat.name}
+                      : chat.chatName}
                   </Text>
                 </Box>
               ))}

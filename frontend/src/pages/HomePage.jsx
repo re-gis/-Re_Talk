@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   // const history = useHistory();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));

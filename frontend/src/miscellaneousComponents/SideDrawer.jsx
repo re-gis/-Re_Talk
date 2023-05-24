@@ -68,7 +68,7 @@ const SideDrawer = () => {
         const { data } = await axios.get(`/api/user?search=${search}`, config);
         setLoading(false);
         setSearchResults(data);
-        setSearch('')
+        setSearch("");
       } catch (error) {
         toast({
           title: "Internal server error...",
