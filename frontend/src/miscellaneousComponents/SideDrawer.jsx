@@ -178,8 +178,16 @@ const SideDrawer = () => {
               />
               <Button onClick={handleSearch}>Go</Button>
             </Box>
+            {/* {loading ? (
+              <ChatLoading />
+            ) : (
+              
+            )} */}
+
             {loading ? (
               <ChatLoading />
+            ) : searchResults.length === 0 ? (
+              <div style={{ color: "red" }}>No user found!</div>
             ) : (
               searchResults?.map((rs) => (
                 <>

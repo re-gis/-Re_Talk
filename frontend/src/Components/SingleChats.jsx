@@ -1,12 +1,14 @@
 import React from "react";
 import { ChatState } from "../context/ChatProvider";
 import { Box, IconButton, Text } from "@chakra-ui/react";
-import { getSender } from "../config/ChatLogics";
+import { getReceiver, getSender } from "../config/ChatLogics";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModel from "../miscellaneousComponents/ProfileModel";
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
+  const userInfo = localStorage.getItem("userInfo");
+  const u = JSON.parse(userInfo);
   return (
     <>
       {selectedChat ? (
@@ -28,8 +30,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             />
             {!selectedChat.isGroupChat ? (
               <>
-                {getSender(user, selectedChat.users)}
-                <ProfileModel user={getSender(user, selectedChat.users)} />
+                {getSender(user ? user : u, selectedChat.users)}
+                <ProfileModel
+                  user={getSender(user ? user : u, selectedChat.users)}
+                />
               </>
             ) : (
               <>

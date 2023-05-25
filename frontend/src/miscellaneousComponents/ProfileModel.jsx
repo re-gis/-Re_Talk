@@ -15,7 +15,11 @@ import {
 } from "@chakra-ui/react";
 
 const ProfileModel = ({ user, children }) => {
-  const u = JSON.parse(user)
+  const o = JSON.stringify(user)
+  const au = JSON.parse(o)
+  const us = localStorage.getItem("userInfo");
+  // const userInfo = JSON.parse(us)
+  const u = JSON.parse(us);
   const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <>
@@ -43,7 +47,7 @@ const ProfileModel = ({ user, children }) => {
             d="flex"
             justifyContent={"center"}
           >
-            {u.name}
+            {user ? au.name : u.name}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -52,15 +56,14 @@ const ProfileModel = ({ user, children }) => {
             alignItems={"center"}
             justifyContent={"space-between"}
           >
-            {console.log(user)}
             <Image
               borderRadius={"full"}
               boxSize={"150px"}
-              src={u.pic}
-              alt={u.name}
+              src={user ? au.pic : u.pic}
+              alt={user ? au.name : u.name}
             ></Image>
             <Text fontSize={"28px"} fontFamily={"Work-sans"}>
-              Email: {u.email}
+              Email: {user ? au.email : u.email}
             </Text>
           </ModalBody>
 
