@@ -6,7 +6,7 @@ import ChatLoading from "../Components/ChatLoading";
 import { getSender } from "../config/ChatLogics";
 import GroupChatModal from "../GroupChatModal";
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = ({ fetchAgain, setFetchAgain }) => {
   const userInfo = localStorage.getItem("userInfo");
   const u = JSON.parse(userInfo);
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -20,8 +20,10 @@ const MyChats = ({ fetchAgain }) => {
           authorization: "Bearer " + u.token,
         },
       };
-      const { data } = await axios.get(`/api/chats`, config);
+      const { data } = await axios.get(`/api/chat`, config);
       setChats(data);
+      console.log(data);
+      setFetchAgain(!fetchAgain);
     } catch (error) {
       toast({
         title: "Internal server error...",
@@ -50,6 +52,7 @@ const MyChats = ({ fetchAgain }) => {
         borderRadius={"lg"}
         borderWidth={"1px"}
       >
+        {/* {console.log(u)} */}
         <Box
           pb={3}
           px={3}

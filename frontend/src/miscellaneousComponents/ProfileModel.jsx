@@ -13,14 +13,16 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { ChatState } from "../context/ChatProvider";
 
 const ProfileModel = ({ user, children }) => {
-  const o = JSON.stringify(user)
-  const au = JSON.parse(o)
+  const o = JSON.stringify(user);
+  const au = JSON.parse(o);
   const us = localStorage.getItem("userInfo");
   // const userInfo = JSON.parse(us)
   const u = JSON.parse(us);
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const {  selectedChat, setSelectedChat } = ChatState();
   return (
     <>
       {children ? (
@@ -47,7 +49,8 @@ const ProfileModel = ({ user, children }) => {
             d="flex"
             justifyContent={"center"}
           >
-            {user ? au : u.name}
+            {selectedChat? selectedChat.users[1].name
+            : u.name}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -59,11 +62,10 @@ const ProfileModel = ({ user, children }) => {
             <Image
               borderRadius={"full"}
               boxSize={"150px"}
-              src={u.pic}
-              alt={user ? au : u.name}
+              src={selectedChat ?selectedChat.users[1].pic : u.pic}
             ></Image>
             <Text fontSize={"28px"} fontFamily={"Work-sans"}>
-              Email: {u.email}
+              Email: {selectedChat ? selectedChat.users[1].email : u.email}
             </Text>
           </ModalBody>
 

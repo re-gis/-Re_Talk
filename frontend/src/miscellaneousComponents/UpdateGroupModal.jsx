@@ -34,7 +34,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
 
   const handleRemove = async (user1) => {
-    if (selectedChat.groupAdmin._id !== user._id && user._id !== user1._id) {
+    if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
       toast({
         title: "Only admins can remove users!",
         status: "error",
@@ -99,8 +99,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
       );
 
       setSelectedChat(data);
-      setChats([data]);
-      setFetchAgain(!fetchAgain);
+      setFetchAgain(fetchAgain);
       setRenameLoading(false);
     } catch (error) {
       toast({

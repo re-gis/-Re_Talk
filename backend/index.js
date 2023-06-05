@@ -7,6 +7,7 @@ import colors from "colors";
 import { userRouter } from "./Routers/user.routes.js";
 import { errorHandler, notFound } from "./middlewares/error.middleware.js";
 import { chatRouter } from "./Routers/chat.routes.js";
+import { messageRouter } from "./Routers/message.routes.js";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
@@ -25,10 +26,6 @@ app.use(
   })
 );
 
-app.get("/api/chats", (req, res) => {
-  return res.status(200).send(chats);
-});
-
 // Error middewares
 // app.use(notFound)
 // app.use(errorHandler)
@@ -38,6 +35,9 @@ app.use("/api/user", userRouter);
 
 // Chat routes
 app.use("/api/chats", chatRouter);
+
+// messages routes
+app.use('/api/message', messageRouter)
 
 app.listen(PORT, () => {
   console.log(`Server listening port ${PORT}...`.underline.blue);
