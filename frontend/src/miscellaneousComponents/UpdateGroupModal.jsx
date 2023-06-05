@@ -21,6 +21,7 @@ import { ChatState } from "../context/ChatProvider";
 import UserBadgeItem from "../miscellaneousComponents/UserBadgeItem";
 import axios from "axios";
 import UserListItem from "../Components/UserListItem";
+import { fetchChats } from "../../../backend/controllers/chat.controller";
 
 const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,6 +54,8 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
+
+
       const { data } = await axios.put(
         "/api/chats/remove",
         {
@@ -64,7 +67,9 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
 
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetcMessages()
       setLoading(false);
+
     } catch (error) {
       toast({
         title: "Error Occurred!",

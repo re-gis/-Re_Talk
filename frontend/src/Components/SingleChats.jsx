@@ -14,6 +14,7 @@ import ProfileModel from "../miscellaneousComponents/ProfileModel";
 import UpdateGroupModal from "../miscellaneousComponents/UpdateGroupModal";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import '../miscellaneousComponents/style.css'
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -38,7 +39,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       const {data} = await axios.get(`/api/message/${selectedChat._id}`, config)
       setMessages(data)
       setLoading(false)
-      console.log(data)
     } catch (error) {
        toast({
          title: "Error occurred!",
@@ -122,6 +122,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <UpdateGroupModal
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
+                  fetchMessages={fetchMessages}
                 />
               </>
             )}
@@ -146,7 +147,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin={"auto"}
               />
             ) : (
-              <div>{/* messages */}</div>
+              <div className="messages">{/* messages */}</div>
             )}
 
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
