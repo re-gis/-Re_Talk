@@ -23,7 +23,7 @@ import axios from "axios";
 import UserListItem from "../Components/UserListItem";
 import { fetchChats } from "../../../backend/controllers/chat.controller";
 
-const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
   const [search, setSearch] = useState();
@@ -67,7 +67,7 @@ const UpdateGroupModal = ({ fetchAgain, setFetchAgain }) => {
 
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-      fetcMessages()
+      fetchAgain()
       setLoading(false);
 
     } catch (error) {
