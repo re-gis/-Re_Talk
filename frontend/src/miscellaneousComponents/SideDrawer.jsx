@@ -27,6 +27,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ChatLoading from "../Components/ChatLoading";
 import UserListItem from "../Components/UserListItem";
+import { getSender } from "../config/ChatLogics";
+import { Effect } from 'react-notification-badge'
+import NotificationBadge from "react-notification-badge/lib/components/NotificationBadge";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -37,7 +40,14 @@ const SideDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  const { user, setSelectedChat, chats, setChats } = ChatState();
+  const {
+    user,
+    setSelectedChat,
+    chats,
+    setChats,
+    notifications,
+    setNotifications,
+  } = ChatState();
   const userInfo = localStorage.getItem("userInfo");
 
   const u = JSON.parse(userInfo);
@@ -140,9 +150,25 @@ const SideDrawer = () => {
         <div>
           <Menu>
             <MenuButton p={1}>
+              <NotificationBadge count={notifications.length} effect={Effect.SCALE} />
               <BellIcon fontSize={"2xl"} m={1} />
             </MenuButton>
-            <MenuList></MenuList>
+            <MenuList pl={2}>
+              {!notifications.length && "No New Message"}
+              {notifications.map((notif) => (
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif.chat);
+                    setNotifications(notifications.filter((n) => n !== notif));
+                  }}
+                >
+                  {notif.chat.isGroupChat
+                    ? `New Message in ${notif.chat.chatName}`
+                    : `New Message from ${getSender(user, notif.chat.users)}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -178,11 +204,6 @@ const SideDrawer = () => {
               />
               <Button onClick={handleSearch}>Go</Button>
             </Box>
-            {/* {loading ? (
-              <ChatLoading />
-            ) : (
-              
-            )} */}
 
             {loading ? (
               <ChatLoading />

@@ -24,7 +24,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const {
+    user,
+    selectedChat,
+    setSelectedChat,
+    notifications,
+    setNotifications,
+  } = ChatState();
   const userInfo = localStorage.getItem("userInfo");
   const u = JSON.parse(userInfo);
   const toast = useToast();
@@ -78,12 +84,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     socket.on('message received', (newMessageReceived) => {
       if(!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
-        // notifications
+        if(!notifications.includes(newMessageReceived)) {
+          setNotifications([newMessageReceived, ...notifications])
+          setFetchAgain(!fetchAgain)
+        }
       } else {
         setMessages([...messages, newMessageReceived])
       }
     })
   }, [])
+
 
   const sendMessage = async (e) => {
     if (e.key === "Enter" && newMessage) {
