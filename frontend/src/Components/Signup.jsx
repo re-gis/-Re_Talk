@@ -130,6 +130,7 @@ const Signup = () => {
       setLoading(false);
       navigate("/chats");
     } catch (error) {
+      console.log(error)
       toast({
         title: "Email already exists",
         status: "error",
